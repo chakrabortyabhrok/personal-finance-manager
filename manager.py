@@ -1,0 +1,119 @@
+import os
+import json
+from expense import Expense
+
+class FinanceManager:  
+
+    def __init__(self):
+        self.expenses = []
+        self.budget = 5000
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        self.file_name = os.path.join(BASE_DIR, "data.json")
+    
+    def add_expense(self, expense_object):
+        self.expenses.append(expense_object)
+        self.save_to_file()
+
+    def delete_by_id(self, expense_id):
+        for exp in self.expenses:
+            if exp.id == expense_id:
+                self.expenses.remove(exp)
+                self.save_to_file()
+                return True
+        return False
+    
+    def filter_by_category(self, category_name):
+        return[
+            exp for exp in self.expenses
+            if exp.category.lower() == category_name.lower()
+            ]
+    
+    def get_total(self):
+        return sum(exp.amount for exp in self.expenses)
+    
+    def get_next_id(self):
+        if not self.expenses:
+            return 1
+        return max(exp.id for exp in self.expenses) + 1
+    
+    def get_category_breakdown(self):
+        breakdown = {}
+        for exp in self.expenses:
+            cat = exp.category
+            if cat in breakdown:
+                breakdown[cat] += exp.amount
+            else:
+                breakdown[cat] = exp.amount
+        return breakdown
+
+    def get_payment_breakdown(self):
+        breakdown = {}
+        for exp in self.expenses:
+            method = exp.payment_method
+            if method in breakdown:
+                breakdown[method] += exp.amount
+            else:
+                breakdown[method] = exp.amount
+        return breakdown
+    
+    def display_stats(self):
+        if not self.expenses:
+            print("-- No expenses to show stats --")
+            return
+        
+        total = self.get_total()
+        remaining = self.budget - total
+        print(f"\n- Total Spent: ₹{total:.2f}")
+        print(f"- Remaining Budget: ₹{remaining:.2f}")
+        if total > self.budget:
+            print("⚠️  WARNING: OVER BUDGET!!  ⚠️")
+        
+        print("\nCategory Breakdown: ")
+        cat_break = self.get_category_breakdown()
+        for cat, amount in sorted(cat_break.items()):
+            print(f"\n- {cat:<20} - {amount:>8.2f}")
+        
+        print(f"\nPayment Breakdown: ")
+        method_break = self.get_payment_breakdown()
+        for method, amount in sorted(method_break.items()):
+            print(f"\n- {method:<15} - {amount:>8.2f}")
+
+    def display_all(self):
+        if  not self.expenses:
+            print("-- No expense recorded yet. --")
+            return
+        
+        print("\n" + "="*120)
+        print("ID  |    DATE    |           ITEM            |   AMOUNT   |       CATEGORY       |     PAYMENT     |     NOTES    ")
+        print("="*120)
+        for exp in self.expenses:
+            print(exp.display_row())
+        print("="*120 + "\n")
+    
+    def load_from_file(self):
+        if not os.path.exists(self.file_name):
+            print("-- No file found. starting fresh. --")
+            return
+        try:
+            with open(self.file_name, "r") as f:
+                raw_data = json.load(f)
+                self.expenses = []
+                for d in raw_data:
+                    new_obj = Expense(
+                        id=d["id"], 
+                        date=d["date"], 
+                        item=d["item"], 
+                        amount=float(d["amount"]),
+                        category=d["category"],
+                        payment_method=d["payment_method"], # <--- Watch this key!
+                        notes=d["notes"]
+                    )
+                    self.expenses.append(new_obj)
+            print(f"Loading from: {self.file_name}")
+        except Exception as e:
+            print(f"Error loading data: {e}")
+
+    def save_to_file(self):
+        data_to_save = [exp.to_dict() for exp in self.expenses]
+        with open(self.file_name, "w") as f:
+            json.dump(data_to_save, f, indent=4)
