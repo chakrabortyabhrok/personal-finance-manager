@@ -10,7 +10,7 @@ class Expense:
         self.notes = notes
 
     def display_row(self):
-        return (f"{self.id:<3} | {self.date:<10} | {self.item:<25} | {self.amount:>10.2f} | {self.category:<20} | {self.payment_method:<15} | {self.notes}")
+        return (f"{self.id:<3} | {self.date:<10} | {self.item:<25} | ₹{self.amount:>10.2f} | {self.category:<20} | {self.payment_method:<15} | {self.notes}")
     
     def to_dict(self):
         return {

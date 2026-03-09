@@ -11,9 +11,11 @@ def main():
         --- OOP FINANCE TRACKER ---
         a - Add Expense
         d - Delete Expense
+        b - Show Current Budget
+        u - Update Budget
         f - Show by Category
         v - View All
-        s - Show Total
+        s - Show Stats
         e - Exit
         """
     while True:
@@ -54,6 +56,21 @@ def main():
                 else:
                     print(f"\n-- No expense found with {id_to_delete} ID --")
 
+            except ValueError:
+                print("-- Enter a valid number --")
+
+        elif choice == "b":
+            budget = manager.get_budget()
+            print(f"Budget: ₹{budget:.2f}")
+
+        elif choice == "u":
+            try:
+                new_budget = float(input("- Enter New Budget: "))
+                if manager.update_budget(new_budget):
+                    print(f"Budget updated to ₹{new_budget:.2f}")
+                    
+                else:
+                    print("Enter a positive number")
             except ValueError:
                 print("-- Enter a valid number --")
 

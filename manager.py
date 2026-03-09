@@ -5,11 +5,23 @@ from expense import Expense
 class FinanceManager:  
 
     def __init__(self):
-        self.expenses = []
-        self.budget = 5000
+        self._expenses = []
+        self._budget = None
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         self.file_name = os.path.join(BASE_DIR, "data.json")
     
+    def get_budget(self):
+        return self._budget
+    
+    def update_budget(self, new_value):
+        if new_value > 0:
+            self._budget = new_value
+            self.save_to_file()
+            return True
+        else:
+            print("-- Budget must be positive --")
+            return False
+        
     def add_expense(self, expense_object):
         self.expenses.append(expense_object)
         self.save_to_file()
@@ -62,10 +74,10 @@ class FinanceManager:
             return
         
         total = self.get_total()
-        remaining = self.budget - total
+        remaining = self._budget - total
         print(f"\n- Total Spent: ₹{total:.2f}")
         print(f"- Remaining Budget: ₹{remaining:.2f}")
-        if total > self.budget:
+        if total > self._budget:
             print("⚠️  WARNING: OVER BUDGET!!  ⚠️")
         
         print("\nCategory Breakdown: ")
@@ -92,13 +104,19 @@ class FinanceManager:
     
     def load_from_file(self):
         if not os.path.exists(self.file_name):
-            print("-- No file found. starting fresh. --")
+            print("-- No file found. Starting fresh. --")
             return
+        
         try:
             with open(self.file_name, "r") as f:
                 raw_data = json.load(f)
+
+                self._budget = raw_data.get("budget", 5000)
+                
+                expenses_data = raw_data.get("expenses", [])
                 self.expenses = []
-                for d in raw_data:
+                
+                for d in expenses_data:
                     new_obj = Expense(
                         id=d["id"], 
                         date=d["date"], 
@@ -109,11 +127,15 @@ class FinanceManager:
                         notes=d["notes"]
                     )
                     self.expenses.append(new_obj)
-            print(f"Loading from: {self.file_name}")
+                print(f"Loaded: {len(self.expenses)} expenses | Budget: ₹{self._budget}")
+
         except Exception as e:
             print(f"Error loading data: {e}")
 
     def save_to_file(self):
-        data_to_save = [exp.to_dict() for exp in self.expenses]
+        data_to_save = {
+            "budget": self._budget,
+            "expenses": [exp.to_dict() for exp in self.expenses]
+        }
         with open(self.file_name, "w") as f:
             json.dump(data_to_save, f, indent=4)
