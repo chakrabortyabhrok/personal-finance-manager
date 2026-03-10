@@ -16,6 +16,7 @@ def main():
         f - Show by Category
         v - View All
         s - Show Stats
+        x - Export to csv
         e - Exit
         """
     while True:
@@ -98,6 +99,9 @@ def main():
 
         elif choice == "s":
             manager.display_stats()
+
+        elif choice == "x":
+            manager.export_to_csv()
 
         elif choice == "e":
             print("-- Goodbye --")

@@ -1,6 +1,7 @@
 import os
 import json
 from expense import Expense
+import csv
 
 class FinanceManager:  
 
@@ -21,6 +22,25 @@ class FinanceManager:
         else:
             print("-- Budget must be positive --")
             return False
+        
+    def export_to_csv(self, file_name = "expense_export.csv"):
+        if not self.expenses:
+            print("-- No expense to export --")
+            return
+        fieldnames = ["id", "date", "item", "amount", "category", "payment_method", "notes"]
+        try:
+            with open(file_name, 'w', newline='', encoding='utf-8') as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+                writer.writeheader()
+
+                for exp in self.expenses:
+                    writer.writerow(exp.to_dict())
+            print(f"- Exported {len(self.expenses)} expenses to '{file_name}' successfuly")
+            print("-- Open in Google Sheets --")
+        except Exception as e:
+            print(f"-- Error exporting CSV: {e} --")
+
         
     def add_expense(self, expense_object):
         self.expenses.append(expense_object)
