@@ -102,7 +102,7 @@ def main():
             manager.display_stats()
 
         elif choice == "i":
-            filename = input("Enter CSV filename to import (default: expenses_export.csv): ").strip()
+            filename = input("Enter CSV filename to import (default: expense_export.csv): ").strip()
             if not filename:
                 filename = "expense_export.csv"
             count = manager.import_as_csv(filename)

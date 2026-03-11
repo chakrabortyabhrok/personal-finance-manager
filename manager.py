@@ -23,40 +23,43 @@ class FinanceManager:
             print("-- Budget must be positive --")
             return False
         
-    def import_as_csv(self, file_name = "export_expense.csv"):
-        if not os.path.exists(file_name):
-            print(f"-- File {file_name} not found --")
+    def import_as_csv(self, file_name = "expense_export.csv"):
+        
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        full_path = os.path.join(base_dir, file_name)
+        if not os.path.exists(full_path):
+            print(f"-- File {full_path} not found --")
             return 0
         imported_count = 0
         try:
-            with open(file_name, "r", encoding="utf-8") as csvfile:
-                return csv.DictReader(csvfile)
-            expected = {"id", "date", "item", "amount", "category", "payment_method", "notes"}
-            if not expected.issubset(reader.fieldnames):
-                print("-- Warning: CSV missing some columns --")
+            with open(full_path, "r", encoding="utf-8") as csvfile:
+                reader= csv.DictReader(csvfile)
+                expected = {"id", "date", "item", "amount", "category", "payment_method", "notes"}
+                if not expected.issubset(reader.fieldnames):
+                    print("-- Warning: CSV missing some columns --")
+                for row in reader:
+                    try:
+                        exp_id = int(row["id"])
+                        amount = float(row["amount"])
 
-            for row in reader:
-                try:
-                    exp_id = int(row("id"))
-                    amount = float(row("amount"))
+                        new_exp =Expense(
+                            id = exp_id,
+                            date= row["date"],
+                            item= row["item"],
+                            amount= amount,
+                            category= row['category'],
+                            payment_method= row["payment_method"],
+                            notes= row.get("notes", "")
+                        )
+                    
+                        self.expenses.append(new_exp)
+                        imported_count += 1
 
-                    new_exp ={
-                        "id": exp_id,
-                        "date": row["date"],
-                        "item": row["item"],
-                        "amount": amount,
-                        "category": row['category'],
-                        "payment_method": row["payment_method"],
-                        "notes": row.get("notes", "")
-                    }
-                    self.expenses.append(new_exp)
-                    imported_count += 1
-
-                except (ValueError, KeyError) as e:
-                    print(f"-- Skipping invalid row: {row}")
-                    continue
+                    except (ValueError, KeyError) as e:
+                        print(f"-- Skipping invalid row: {row}")
+                        continue
             self.save_to_file()
-            print(f"Imported {imported_count} expenses from '{filename}'")
+            print(f"Imported {imported_count} expenses from '{full_path}'")
             return imported_count
 
         except Exception as e:
@@ -67,16 +70,18 @@ class FinanceManager:
         if not self.expenses:
             print("-- No expense to export --")
             return
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        full_path = os.path.join(base_dir, file_name)
         fieldnames = ["id", "date", "item", "amount", "category", "payment_method", "notes"]
         try:
-            with open(file_name, 'w', newline='', encoding='utf-8') as csvfile:
+            with open(full_path, 'w', newline='', encoding='utf-8') as csvfile:
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
                 writer.writeheader()
 
                 for exp in self.expenses:
                     writer.writerow(exp.to_dict())
-            print(f"- Exported {len(self.expenses)} expenses to '{file_name}' successfuly")
+            print(f"- Exported {len(self.expenses)} expenses to '{full_path}' successfuly")
             print("-- Open in Google Sheets --")
         except Exception as e:
             print(f"-- Error exporting CSV: {e} --")
