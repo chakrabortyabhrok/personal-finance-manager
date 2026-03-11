@@ -16,7 +16,8 @@ def main():
         f - Show by Category
         v - View All
         s - Show Stats
-        x - Export to csv
+        i - Import from CSV
+        x - Export to CSV
         e - Exit
         """
     while True:
@@ -99,6 +100,16 @@ def main():
 
         elif choice == "s":
             manager.display_stats()
+
+        elif choice == "i":
+            filename = input("Enter CSV filename to import (default: expenses_export.csv): ").strip()
+            if not filename:
+                filename = "expense_export.csv"
+            count = manager.import_as_csv(filename)
+            if count > 0:
+                print(f"Successfully imported {count} expenses.")
+            else:
+                print("-- No expenses imported (check file or errors above). --")
 
         elif choice == "x":
             manager.export_to_csv()

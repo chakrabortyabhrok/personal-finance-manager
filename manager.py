@@ -23,6 +23,46 @@ class FinanceManager:
             print("-- Budget must be positive --")
             return False
         
+    def import_as_csv(self, file_name = "export_expense.csv"):
+        if not os.path.exists(file_name):
+            print(f"-- File {file_name} not found --")
+            return 0
+        imported_count = 0
+        try:
+            with open(file_name, "r", encoding="utf-8") as csvfile:
+                return csv.DictReader(csvfile)
+            expected = {"id", "date", "item", "amount", "category", "payment_method", "notes"}
+            if not expected.issubset(reader.fieldnames):
+                print("-- Warning: CSV missing some columns --")
+
+            for row in reader:
+                try:
+                    exp_id = int(row("id"))
+                    amount = float(row("amount"))
+
+                    new_exp ={
+                        "id": exp_id,
+                        "date": row["date"],
+                        "item": row["item"],
+                        "amount": amount,
+                        "category": row['category'],
+                        "payment_method": row["payment_method"],
+                        "notes": row.get("notes", "")
+                    }
+                    self.expenses.append(new_exp)
+                    imported_count += 1
+
+                except (ValueError, KeyError) as e:
+                    print(f"-- Skipping invalid row: {row}")
+                    continue
+            self.save_to_file()
+            print(f"Imported {imported_count} expenses from '{filename}'")
+            return imported_count
+
+        except Exception as e:
+            print(f"Error importing CSV: {e}")
+            return 0
+
     def export_to_csv(self, file_name = "expense_export.csv"):
         if not self.expenses:
             print("-- No expense to export --")
