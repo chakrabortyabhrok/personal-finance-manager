@@ -31,6 +31,7 @@ class FinanceManager:
             print(f"-- File {full_path} not found --")
             return 0
         imported_count = 0
+        self.expenses = []
         try:
             with open(full_path, "r", encoding="utf-8") as csvfile:
                 reader= csv.DictReader(csvfile)
