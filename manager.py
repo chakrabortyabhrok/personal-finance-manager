@@ -60,32 +60,35 @@ class FinanceManager:
                         print(f"-- Skipping invalid row: {row}")
                         continue
             self.save_to_file()
-            print(f"Imported {imported_count} expenses from '{full_path}'")
+            print(f"\nImported {imported_count} expenses from '{full_path}'")
             return imported_count
 
         except Exception as e:
             print(f"Error importing CSV: {e}")
             return 0
-
-    def export_to_csv(self, file_name = "expense_export.csv"):
+        
+    def export_to_csv(self, file_name ):#= "expense_export.csv"):
         if not self.expenses:
             print("-- No expense to export --")
             return
+        
+        fieldnames = ["id", "date", "item", "amount", "category", "payment_method", "notes"]
+
         base_dir = os.path.dirname(os.path.abspath(__file__))
         full_path = os.path.join(base_dir, file_name)
-        fieldnames = ["id", "date", "item", "amount", "category", "payment_method", "notes"]
+
         try:
-            with open(full_path, 'w', newline='', encoding='utf-8') as csvfile:
+            with open(full_path, "w", newline='', encoding='utf-8') as csvfile:
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
                 writer.writeheader()
 
-                for exp in self.expenses:
-                    writer.writerow(exp.to_dict())
-            print(f"- Exported {len(self.expenses)} expenses to '{full_path}' successfuly")
-            print("-- Open in Google Sheets --")
+                for e in self.expenses:
+                    writer.writerow(e.to_dict())
+
+            print(f"-- Exported {len(self.expenses)} items to {full_path} --\n")
         except Exception as e:
-            print(f"-- Error exporting CSV: {e} --")
+            print(f"Error exporting CSV - {e}")
 
         
     def add_expense(self, expense_object):

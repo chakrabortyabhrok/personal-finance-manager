@@ -1,6 +1,6 @@
 id,date,item,amount,category,payment_method,notes
-1,2026-01-05,Mechanical Keyboard,120.5,Electronics,Credit Card,Work from home setup
-2,2026-01-07,Monitor Stand,45,Electronics,Debit Card,Ergonomic upgrade
+1,2026-01-05,Mechanical Keyboard,120.50,Electronics,Credit Card,Work from home setup
+2,2026-01-07,Monitor Stand,45.00,Electronics,Debit Card,Ergonomic upgrade
 3,2026-01-15,USB-C Hub,35.99,Electronics,Cash,Travel adapter
 4,2026-02-01,Wireless Mouse,59,Electronics,Credit Card,Replacement for broken one
 5,2026-02-10,Headphones,299,Electronics,Credit Card,Deep focus sessions
@@ -53,4 +53,4 @@ id,date,item,amount,category,payment_method,notes
 52,2026-02-13,Bicycle Repair,45,Transport,Debit Card,Flat tire fix
 53,2026-02-16,Toiletries,22.4,Groceries,Mobile Pay,Soap and shampoo
 54,2026-02-18,Sewer Bill,25,Utilities,Bank Transfer,City services
-55,2026-02-21,Movie Rental,11,Entertainment,Credit Card,Digital rental
+55,2026-02-21,Movie Rental,10,Entertainment,Credit Card,Digital rental

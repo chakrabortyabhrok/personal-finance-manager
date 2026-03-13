@@ -491,7 +491,7 @@
             "id": 55,
             "date": "2026-02-21",
             "item": "Movie Rental",
-            "amount": 11.0,
+            "amount": 10.0,
             "category": "Entertainment",
             "payment_method": "Credit Card",
             "notes": "Digital rental"

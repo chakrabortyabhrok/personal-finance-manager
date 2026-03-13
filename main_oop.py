@@ -112,7 +112,11 @@ def main():
                 print("-- No expenses imported (check file or errors above). --")
 
         elif choice == "x":
-            manager.export_to_csv()
+            user_name = input("Enter a file name: (press ENTER to set to default) \n").strip()
+            if user_name == "":
+                user_name = "expense_export.csv"
+                
+            manager.export_to_csv(user_name)
 
         elif choice == "e":
             print("-- Goodbye --")
