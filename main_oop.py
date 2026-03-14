@@ -100,9 +100,11 @@ def main():
 
         elif choice == "i":
             filename = input("Enter CSV filename to import (default: expense_export.csv): ").strip()
-            if not filename:
+            if filename == "":
                 filename = "expense_export.csv"
+            
             count = manager.import_as_csv(filename)
+            
             if count > 0:
                 print(f"Successfully imported {count} expenses.")
             else:
