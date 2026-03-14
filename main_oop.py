@@ -8,17 +8,14 @@ def main():
 
 
     MENU = """
-        --- OOP FINANCE TRACKER ---
-        a - Add Expense
-        d - Delete Expense
-        b - Show Current Budget
-        u - Update Budget
-        f - Show by Category
-        v - View All
-        s - Show Stats
-        i - Import from CSV
-        x - Export to CSV
-        e - Exit
+                        --- MENU ---
+
+        a - Add Expense              v - View All
+        d - Delete Expense           s - Show Stats      
+        b - Show Current Budget      i - Import from CSV
+        u - Update Budget            x - Export to CSV
+        f - Show by Category         e - Exit
+    
         """
     while True:
         print(MENU)

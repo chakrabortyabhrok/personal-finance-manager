@@ -67,28 +67,29 @@ class FinanceManager:
             print(f"Error importing CSV: {e}")
             return 0
         
-    def export_to_csv(self, file_name ):#= "expense_export.csv"):
+    def export_to_csv(self, file_name):
         if not self.expenses:
-            print("-- No expense to export --")
+            print("-- No expenses to export --")
             return
         
         fieldnames = ["id", "date", "item", "amount", "category", "payment_method", "notes"]
 
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        full_path = os.path.join(base_dir, file_name)
+        base_path = os.path.dirname(os.path.abspath(__file__))
+        full_path = os.path.join(base_path, file_name)
 
         try:
-            with open(full_path, "w", newline='', encoding='utf-8') as csvfile:
+            with open(full_path, 'w', newline='', encoding='utf-8')as csvfile:
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
                 writer.writeheader()
 
-                for e in self.expenses:
-                    writer.writerow(e.to_dict())
+                for exp in self.expenses:
+                    to_dictionary = exp.to_dict()
+                    writer.writerow(to_dictionary)
+            print(f"- Exported {len(self.expenses)} expenses in {full_path}")
 
-            print(f"-- Exported {len(self.expenses)} items to {full_path} --\n")
         except Exception as e:
-            print(f"Error exporting CSV - {e}")
+            print(f"- Error exporting CSV: {e}")
 
         
     def add_expense(self, expense_object):

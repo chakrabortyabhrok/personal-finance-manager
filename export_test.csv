@@ -1,0 +1,56 @@
+id,date,item,amount,category,payment_method,notes
+1,2026-01-05,Mechanical Keyboard,120.5,Electronics,Credit Card,Work from home setup
+2,2026-01-07,Monitor Stand,45.0,Electronics,Debit Card,Ergonomic upgrade
+3,2026-01-15,USB-C Hub,35.99,Electronics,Cash,Travel adapter
+4,2026-02-01,Wireless Mouse,59.0,Electronics,Credit Card,Replacement for broken one
+5,2026-02-10,Headphones,299.0,Electronics,Credit Card,Deep focus sessions
+6,2026-01-02,Starbucks Coffee,6.5,Food & Dining,Mobile Pay,Morning fuel
+7,2026-01-12,Pizza Night,28.4,Food & Dining,Credit Card,Friday treat
+8,2026-01-22,Sushi Dinner,52.0,Food & Dining,Credit Card,Birthday dinner
+9,2026-02-05,Brunch with Friends,35.0,Food & Dining,Debit Card,Sunday social
+10,2026-02-18,Burger King,12.5,Food & Dining,Cash,Quick lunch
+11,2026-01-03,Uber Ride,18.2,Transport,Mobile Pay,To downtown
+12,2026-01-10,Gas Station,55.0,Transport,Credit Card,Full tank
+13,2026-01-25,Monthly Subway Pass,90.0,Transport,Debit Card,Commute
+14,2026-02-08,Parking Fee,15.0,Transport,Cash,Mall parking
+15,2026-02-20,Train Ticket,42.0,Transport,Credit Card,Weekend getaway
+16,2026-01-04,Weekly Groceries,85.3,Groceries,Debit Card,"Milk, eggs, veg"
+17,2026-01-11,Whole Foods,112.0,Groceries,Credit Card,Organic haul
+18,2026-01-18,Trader Joe's,64.5,Groceries,Debit Card,Snacks and frozen meals
+19,2026-02-02,Local Market,22.1,Groceries,Cash,Fresh fruit
+20,2026-02-15,Costco Run,210.0,Groceries,Credit Card,Bulk essentials
+21,2026-01-01,Electricity Bill,78.4,Utilities,Bank Transfer,December usage
+22,2026-01-05,High Speed Internet,60.0,Utilities,Credit Card,Monthly fiber
+23,2026-01-20,Water Bill,32.5,Utilities,Bank Transfer,Quarterly adjustment
+24,2026-02-01,Phone Plan,45.0,Utilities,Debit Card,Unlimited data
+25,2026-02-12,Heating Bill,105.2,Utilities,Credit Card,Winter peak
+26,2026-01-08,Netflix Subscription,15.99,Entertainment,Credit Card,Monthly sub
+27,2026-01-14,Cinema Tickets,24.0,Entertainment,Debit Card,Sci-fi movie night
+28,2026-01-30,Concert Ticket,150.0,Entertainment,Credit Card,Summer festival
+29,2026-02-04,Kindle E-book,9.99,Entertainment,Mobile Pay,New thriller
+30,2026-02-14,Spotify Family,16.99,Entertainment,Credit Card,Audio streaming
+31,2026-01-06,Gym Membership,50.0,Health & Wellness,Debit Card,Monthly fee
+32,2026-01-21,Pharmacy,22.5,Health & Wellness,Cash,Vitamins and cold meds
+33,2026-02-03,Yoga Class,20.0,Health & Wellness,Mobile Pay,Drop-in session
+34,2026-02-11,Dentist Checkup,85.0,Health & Wellness,Credit Card,Routine cleaning
+35,2026-02-19,Therapy Session,100.0,Health & Wellness,Debit Card,Mental health check
+36,2026-01-09,Standing Desk,350.0,Electronics,Credit Card,Home office upgrade
+37,2026-01-10,Indian Takeout,42.5,Food & Dining,Mobile Pay,Saturday night dinner
+38,2026-01-13,Bus Pass,25.0,Transport,Cash,Weekly reload
+39,2026-01-15,Laundry Detergent,18.75,Groceries,Debit Card,Household supplies
+40,2026-01-17,Trash Collection,30.0,Utilities,Bank Transfer,Monthly fee
+41,2026-01-19,Museum Ticket,15.0,Entertainment,Debit Card,Weekend trip
+42,2026-01-21,Protein Powder,45.99,Health & Wellness,Credit Card,Supplements
+43,2026-01-23,External SSD,110.0,Electronics,Credit Card,Backup drive
+44,2026-01-25,Cooking Class,75.0,Food & Dining,Debit Card,Learning Thai food
+45,2026-01-27,Car Wash,12.0,Transport,Cash,Monthly clean
+46,2026-01-29,Pet Food,55.2,Groceries,Credit Card,Bulk cat food
+47,2026-02-03,Gas Bill,88.0,Utilities,Bank Transfer,Cooking gas
+48,2026-02-05,Video Game,69.99,Entertainment,Mobile Pay,New release
+49,2026-02-07,Eye Exam,120.0,Health & Wellness,Credit Card,Annual checkup
+50,2026-02-09,Cloud Storage,9.99,Electronics,Credit Card,Yearly plan
+51,2026-02-11,Ice Cream,8.5,Food & Dining,Cash,Dessert
+52,2026-02-13,Bicycle Repair,45.0,Transport,Debit Card,Flat tire fix
+53,2026-02-16,Toiletries,22.4,Groceries,Mobile Pay,Soap and shampoo
+54,2026-02-18,Sewer Bill,25.0,Utilities,Bank Transfer,City services
+55,2026-02-21,Movie Rental,10.0,Entertainment,Credit Card,Digital rental
