@@ -18,8 +18,9 @@ def main():
     
         """
     while True:
+        #print("-- Welocome to the task manager --")
         print(MENU)
-        print("-- Welocome to the task manager --\n")
+        
         choice = input("- Enter a choice: \n").lower().strip()
 
         if choice == "a":

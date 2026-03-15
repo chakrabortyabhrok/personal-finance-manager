@@ -36,7 +36,9 @@ class FinanceManager:
         try:
             with open(full_path, 'r', newline='', encoding='utf-8') as csvfile:
                 csv_reader = csv.DictReader(csvfile)
+
                 expected = {"id", "date", "item", "amount", "category", "payment_method", "notes"}
+
                 if not expected.issubset(csv_reader.fieldnames):
                     print("-- Warning: CSV mising some columns --")
                 
@@ -63,35 +65,37 @@ class FinanceManager:
             self.save_to_file()
             print(f"\n Imported {len(self.expenses)} expenses from {full_path}")
             return imported_count
+        
         except Exception as e:
             print(f"- Error importing CSV: {e}")
             return 0
 
     def export_to_csv(self, file_name):
         if not self.expenses:
-            print("-- No expenses to export --")
-            return
+            print("- No expenses to export --")
+            return 0
         
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        full_path = os.path.join(base_dir, file_name)
+
         fieldnames = ["id", "date", "item", "amount", "category", "payment_method", "notes"]
 
-        base_path = os.path.dirname(os.path.abspath(__file__))
-        full_path = os.path.join(base_path, file_name)
-
         try:
-            with open(full_path, 'w', newline='', encoding='utf-8')as csvfile:
+            with open(full_path, 'w', newline='', encoding='utf-8') as csvfile:
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
                 writer.writeheader()
 
                 for exp in self.expenses:
-                    to_dictionary = exp.to_dict()
-                    writer.writerow(to_dictionary)
+                   # to_dictionary = exp.to_dict
+                    writer.writerow(exp.to_dict())
+                    
             print(f"- Exported {len(self.expenses)} expenses in {full_path}")
 
         except Exception as e:
             print(f"- Error exporting CSV: {e}")
 
-        
+    
     def add_expense(self, expense_object):
         self.expenses.append(expense_object)
         self.save_to_file()
