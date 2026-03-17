@@ -13,3 +13,9 @@ class FinanceManager:
             self.file_name = os.path.join(BASE_DIR, "expenses.json")
         else:
             self.file_name = file_name
+    
+    def get_budget(self):
+        return self._budget
+    
+    def get_expense_count(self):
+        return (len(self._expenses))
