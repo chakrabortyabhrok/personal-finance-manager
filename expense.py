@@ -23,3 +23,8 @@ class Expense:
     def display_row(self):
         return (f"{self.id: <3} | {self.date: 10} | {self.item: 25} | {self.amount:>10.2f} | {self.category: <20} | {self.payment_method: <15} | {self.notes}")
     
+    def get_month_year(self):
+        return self.date[:7]
+    
+    def __str__(self):
+        return self.display_row()
