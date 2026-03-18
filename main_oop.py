@@ -41,4 +41,7 @@ def main():
             break
 
 if __name__ == "__main__":
-    main()
+    test_exp = Expense(1, "2026-03-18", "Test Coffee", 45.5, "Food", "UPI", "Morning break")
+    print(test_exp)
+    print(test_exp.to_dict())
+    print(test_exp.get_month_year())

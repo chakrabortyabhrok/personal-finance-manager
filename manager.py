@@ -5,12 +5,12 @@ from expense import Expense
 class FinanceManager:
 
     def __init__(self, initial_budget = 5000, file_name = None):
-        self._expenses = []
+        self._expense = []
         self._budget = initial_budget
 
         if file_name is None:
-            BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-            self.file_name = os.path.join(BASE_DIR, "expenses.json")
+            base_path = os.path.dirname(os.path.abspath(__file__))
+            self.file_name = os.path.join(base_path, "export_test.csv")
         else:
             self.file_name = file_name
     
@@ -18,4 +18,4 @@ class FinanceManager:
         return self._budget
     
     def get_expense_count(self):
-        return (len(self._expenses))
+        return (len(self._expense))
