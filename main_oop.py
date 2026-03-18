@@ -4,6 +4,7 @@ from manager import FinanceManager
 
 def main():
     manager = FinanceManager()
+    manager.load_from_file()
     
     WELCOME_MSG = (f"\n- Budget: ₹{manager.get_budget():.2f} | {manager.get_expense_count()} expenses loaded")
     MENU =  """
@@ -41,7 +42,8 @@ def main():
             break
 
 if __name__ == "__main__":
-    test_exp = Expense(1, "2026-03-18", "Test Coffee", 45.5, "Food", "UPI", "Morning break")
-    print(test_exp)
-    print(test_exp.to_dict())
-    print(test_exp.get_month_year())
+    main()
+    #test_exp = Expense(1, "2026-03-18", "Test Coffee", 45.5, "Food", "UPI", "Morning break")
+    #print(test_exp)
+    #print(test_exp.to_dict())
+    #print(test_exp.get_month_year())
