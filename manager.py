@@ -27,10 +27,8 @@ class FinanceManager:
         else:
             return max(exp.id for exp in self._expenses) +1
     
-    def add_expense(self, date, item, amount, category, payment_method, notes):
-        new_id = self.get_next_id()
-        new_exp = Expense(new_id, date, item, amount, category, payment_method, notes)
-        self._expenses.append(new_exp)
+    def add_expense(self, exp_obj):
+        self._expenses.append(exp_obj)
         self.save_to_file()
 
     def load_from_file(self):
@@ -41,20 +39,43 @@ class FinanceManager:
         try:
             with open(self.file_name, "r") as file:
                 raw_data = json.load(file)
-                self._budget = 5000
+                if isinstance(raw_data, list):
+                    expenses_data = raw_data
+
+                elif isinstance(raw_data, dict):
+                    self._budget = raw_data.get("budget", 5000)
+                    expenses_data = raw_data.get("expenses", [])
+
+                else:
+                    raise ValueError("-- Invalid JSON Format --")
+                
                 self._expenses = []
-                for d in raw_data:
+
+                for d in expenses_data:
                     new_obj=Expense(
                         id=d["id"],
                         date=d["date"],
                         item=d["item"],
-                        amount=d[float("amount")],
+                        amount=float(d["amount"]),
                         category=d["category"],
                         payment_method=d["payment_method"],
                         notes=d["notes"]
                     )
                     self._expenses.append(new_obj)
-
-                print(f"Loaded {len(self._expenses)} expenses | Budget: ₹{self.get_budget()}")
+                
+                print(f"\n- Expenses loaded: {self.get_expense_count()}")
         except Exception as e:
             print(f"Error Loading: {e}")
+
+    def display_all(self):
+        if not self._expenses:
+            print("-- No exepenses found --")
+            return
+        
+        print("\n" + "=" * 120)
+        print("ID  |    DATE    |           ITEM            |   AMOUNT   |       CATEGORY       |     PAYMENT     |     NOTES    ")
+        print("="*120)
+        for exp in self._expenses:
+            print(exp.display_row())
+        print("="*120 + "\n")
+        
