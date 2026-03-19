@@ -9,7 +9,7 @@ class FinanceManager:
         self._expenses = []
         self._budget = None
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-        self.file_name = os.path.join(BASE_DIR, "data.json")
+        self.file_name = os.path.join(BASE_DIR, "expenses.json")
     
     def get_budget(self):
         return self._budget
@@ -197,7 +197,7 @@ class FinanceManager:
                         item=d["item"], 
                         amount=float(d["amount"]),
                         category=d["category"],
-                        payment_method=d["payment_method"], # <--- Watch this key!
+                        payment_method=d["payment_method"],
                         notes=d["notes"]
                     )
                     self.expenses.append(new_obj)
