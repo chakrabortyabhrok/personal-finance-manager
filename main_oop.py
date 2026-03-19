@@ -6,7 +6,7 @@ def main():
     manager = FinanceManager()
     manager.load_from_file()
     
-    WELCOME_MSG = (f"- Current Budget: ₹{manager.get_budget():.2f}")
+    WELCOME_MSG = (f"\n- Current Budget: ₹{manager.get_budget():.2f}")
     MENU =  """
                         --- MENU ---
             a - Add Expense              v - View All
@@ -14,6 +14,7 @@ def main():
             b - Show Current Budget      i - Import from CSV
             u - Update Budget            x - Export to CSV
             f - Show by Category         e - Exit
+            m - Monthly Summary
         """
     
     while True:
@@ -47,10 +48,21 @@ def main():
 
         elif choice == "v":
             manager.display_all()
+        
+        elif choice  == "f":
+            print("")
+            manager.display_stats()
+        
+        elif choice == "m":
+            manager.display_monthly_summary()
 
-        if choice == "e":
+        elif choice == "e":
             print("-- GOODBYE --")
             break
+
+        else:
+            print("\n-- Invalid Choice | Try Again -- \n")
+            
 
 if __name__ == "__main__":
     main()

@@ -16,6 +16,49 @@ class FinanceManager:
     def get_expense_count(self):
         return (len(self._expenses))
     
+    def get_category_breakdown(self):
+        breakdown = {}
+        for exp in self._expenses:
+            cat = exp.category
+            if cat in breakdown:
+                breakdown[cat] += exp.amount
+            else:
+                breakdown[cat] = exp.amount
+        return breakdown
+
+    def get_payment_breakdown(self):
+        breakdown = {}
+        for exp in self._expenses:
+            method = exp.payment_method
+            if method in breakdown:
+                breakdown[method] += exp.amount
+            else:
+                breakdown[method] = exp.amount
+        return breakdown
+
+    def get_total(self):
+        total = sum(exp.amount for exp in self._expenses)
+        return total
+    
+    def display_stats(self):
+        pass
+    
+    def get_monthly_summary(self):
+        monthly = {}
+        for exp in self._expenses:
+            month  = exp.get_month_year()
+            monthly[month] = monthly.get(month, 0) + exp.amount
+        return monthly
+
+    def display_monthly_summary(self):
+        summary = self.get_monthly_summary()
+        if not summary:
+            print("-- No monthly data --\n")
+            return
+        print("\nMonthly Summary: ")
+        for month in sorted(summary.keys()):
+            print(f" {month}: ₹{summary[month]:>10.2f}")
+
     def save_to_file(self):
         data = [exp.to_dict() for exp in self._expenses]
         with open(self.file_name, 'w')as file:
