@@ -41,8 +41,32 @@ class FinanceManager:
         return total
     
     def display_stats(self):
-        pass
-    
+        if not self._expenses:
+            print("-- No expenses found --")
+
+        total_spent = self.get_total()
+        remaining = self._budget - total_spent
+
+        print("=" * 120)
+        print(f"\nTotal Spent: ₹{total_spent:>8.2f}")
+        print(f"Remaining Budget: ₹{remaining:>8.2f}\n")
+        print("=" * 120)
+
+        if total_spent > self._budget:
+            print("-- WARNING !! | ⚠️ OVER BUDGET ⚠️")
+
+        print(" Category Breakdown: \n")
+        cat_break = self.get_category_breakdown()
+        for cat, amt in sorted(cat_break.items()):
+            print(f"{cat:<20} | ₹ {amt:>.2f}")
+        print("-" * 120)
+        print(" Payment Breakdown: \n")
+        pay_break = self.get_payment_breakdown()
+        for method, amount in sorted(pay_break.items()):
+            print(f"{method:<20} | ₹ {amount:>.2f}")
+        print("\n"+"=" * 120)
+        #print("-" * 120)
+
     def get_monthly_summary(self):
         monthly = {}
         for exp in self._expenses:
@@ -57,7 +81,7 @@ class FinanceManager:
             return
         print("\nMonthly Summary: ")
         for month in sorted(summary.keys()):
-            print(f" {month}: ₹{summary[month]:>10.2f}")
+            print(f" {month}: | ₹ {summary[month]:>.2f}")
 
     def save_to_file(self):
         data = [exp.to_dict() for exp in self._expenses]

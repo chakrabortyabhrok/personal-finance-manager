@@ -48,6 +48,9 @@ def main():
 
         elif choice == "v":
             manager.display_all()
+
+        elif choice == "s":
+            manager.display_stats()
         
         elif choice  == "f":
             print("")
