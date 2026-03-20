@@ -84,8 +84,11 @@ class FinanceManager:
             print(f" {month}: | ₹ {summary[month]:>.2f}")
 
     def save_to_file(self):
-        data = [exp.to_dict() for exp in self._expenses]
-        with open(self.file_name, 'w')as file:
+        data = {
+            "budget": self._budget,
+            "expenses": [exp.to_dict() for exp in self._expenses]
+        }
+        with open(self.file_name, 'w') as file:
             json.dump(data, file, indent=4)
     
     def get_next_id(self):
