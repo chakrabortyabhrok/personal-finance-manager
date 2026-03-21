@@ -5,8 +5,7 @@ from datetime import date
 def main():
     manager = FinanceManager()
     manager.load_from_file()
-    
-    WELCOME_MSG = (f"\n- Current Budget: ₹{manager.get_budget():.2f}")
+
     MENU =  """
                         --- MENU ---
             a - Add Expense              v - View All
@@ -18,7 +17,7 @@ def main():
         """
     
     while True:
-        print(WELCOME_MSG)
+        print()
         print(MENU)
         choice = input("- Enter your choice: ").strip().lower()
         
@@ -44,7 +43,40 @@ def main():
 
             new_exp = Expense(new_id, today, item, amount, category, payment_method, notes)
             manager.add_expense(new_exp)
+
+        elif choice == "b":
+            budget = manager.get_budget()
+            print(f"Budget: ₹{budget:.2f}")
+
+        elif choice == "u":
+            try:
+                new_budget = float(input("- Enter New Budget: "))
+                if manager.update_budget(new_budget):
+                    print(f"Budget updated to ₹{new_budget:.2f}")
+                    
+                else:
+                    print("Enter a positive number")
+            except ValueError:
+                print("-- Enter a valid number --")
+
+        elif choice == "i":
+            filename = input("Enter CSV filename to import (default: expense_export.csv): ").strip()
+            if filename == "":
+                filename = "expense_export.csv"
             
+            count = manager.import_as_csv(filename)
+            
+            if count > 0:
+                print(f"Successfully imported {count} expenses.")
+            else:
+                print("-- No expenses imported (check file or errors above). --")
+
+        elif choice == "x":
+            user_name = input("Enter a file name: (press ENTER to set to default) \n").strip()
+            if user_name == "":
+                user_name = "expense_export.csv"
+                
+            manager.export_to_csv(user_name)
 
         elif choice == "v":
             manager.display_all()

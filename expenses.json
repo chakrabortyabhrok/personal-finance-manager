@@ -1,5 +1,5 @@
 {
-    "budget": 5000.0,
+    "budget": 6000.0,
     "expenses": [
         {
             "id": 1,
@@ -491,7 +491,7 @@
             "id": 55,
             "date": "2025-09-21",
             "item": "Movie Rental",
-            "amount": 11.0,
+            "amount": 20.0,
             "category": "Entertainment",
             "payment_method": "Credit Card",
             "notes": "Digital rental"

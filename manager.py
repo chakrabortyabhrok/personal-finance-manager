@@ -1,6 +1,7 @@
 import os
 import json
 from expense import Expense
+import csv
 
 class FinanceManager:
 
@@ -12,6 +13,86 @@ class FinanceManager:
         
     def get_budget(self):
         return self._budget
+    
+    def update_budget(self, new_value):
+        if new_value > 0:
+            self._budget = new_value
+            self.save_to_file()
+            return True
+        else:
+            print("-- Budget must be positive --")
+            return False
+        
+    def import_as_csv(self, file_name):
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        full_path = os.path.join(base_dir, file_name)
+
+        if not os.path.exists(full_path):
+            print(f"-- File {full_path} not found --")
+            return 0
+        imported_count = 0
+        self._expenses = []
+
+        try:
+            with open(full_path, 'r', newline='', encoding='utf-8') as csvfile:
+                csv_reader = csv.DictReader(csvfile)
+
+                expected = {"id", "date", "item", "amount", "category", "payment_method", "notes"}
+
+                if not expected.issubset(csv_reader.fieldnames):
+                    print("-- Warning: CSV mising some columns --")
+                
+                for row in csv_reader:
+                    try:
+                        exp_id = int(row["id"])
+                        amount = float(row["amount"])
+
+                        new_exp = Expense(
+                            id = exp_id,
+                            date=row["date"],
+                            item = row["item"],
+                            amount = amount,
+                            category= row["category"],
+                            payment_method= row["payment_method"],
+                            notes= row.get("notes", "")
+                        )
+                        self._expenses.append(new_exp)
+                        imported_count += 1
+                    except (ValueError, KeyError)as e:
+                        print(f"- Skiping invalid row: {row}")
+                        continue
+
+            self.save_to_file()
+            print(f"\n Imported {len(self._expenses)} expenses from {full_path}")
+            return imported_count
+        
+        except Exception as e:
+            print(f"- Error importing CSV: {e}")
+            return 0
+        
+    def export_to_csv(self, file_name):
+        if not self._expenses:
+            print("- No expenses to export --")
+            return 0
+        
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        full_path = os.path.join(base_dir, file_name)
+
+        fieldnames = ["id", "date", "item", "amount", "category", "payment_method", "notes"]
+
+        try:
+            with open(full_path, 'w', newline='', encoding='utf-8') as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+                writer.writeheader()
+
+                for exp in self._expenses:
+                    writer.writerow(exp.to_dict())
+                    
+            print(f"- Exported {len(self._expenses)} expenses in {full_path}")
+
+        except Exception as e:
+            print(f"- Error exporting CSV: {e}")
     
     def get_expense_count(self):
         return (len(self._expenses))
