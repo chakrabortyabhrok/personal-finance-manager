@@ -6,21 +6,21 @@ def main():
     manager = FinanceManager()
     manager.load_from_file()
 
-
-    MENU = """
+    MENU =  """
                         --- MENU ---
-
-        a - Add Expense              v - View All
-        d - Delete Expense           s - Show Stats      
-        b - Show Current Budget      i - Import from CSV
-        u - Update Budget            x - Export to CSV
-        f - Show by Category         e - Exit
-    
+            a - Add Expense              v - View All
+            d - Delete Expense           s - Show Stats      
+            b - Show Current Budget      i - Import from CSV
+            u - Update Budget            x - Export to CSV
+            f - Show by Category         e - Exit
+            m - Monthly Summary
         """
+    
     while True:
+        print()
         print(MENU)
-        choice = input("- Enter a choice: \n").lower().strip()
-
+        choice = input("- Enter your choice: ").strip().lower()
+        
         if choice == "a":
             print("\n-- Add expense --\n")
             item = input("Enter item name: \n").capitalize()
@@ -43,19 +43,6 @@ def main():
 
             new_exp = Expense(new_id, today, item, amount, category, payment_method, notes)
             manager.add_expense(new_exp)
-            print("\n-- Expense Added --")
-
-        elif choice == "d":
-            try:
-                id_no = input("Input the ID: \n").strip()
-                id_to_delete = int(id_no)
-                if manager.delete_by_id(id_to_delete):
-                    print(f"\nExpense ID - {id_to_delete} deleted successfuly")
-                else:
-                    print(f"\n-- No expense found with {id_to_delete} ID --")
-
-            except ValueError:
-                print("-- Enter a valid number --")
 
         elif choice == "b":
             budget = manager.get_budget()
@@ -71,31 +58,6 @@ def main():
                     print("Enter a positive number")
             except ValueError:
                 print("-- Enter a valid number --")
-
-        elif choice == "f":
-            category_name = input("\n- Input the category name: ").lower()
-            if not category_name:
-                print("-- No category entered --")
-                continue
-
-            filtered = manager.filter_by_category(category_name)
-
-            if not filtered:
-                print(f"-- No category named {category_name}")
-            else:
-                print(f"\nExpenses in {category_name.title()}: ")
-                print("\n" + "="*120)
-                print("ID  |    DATE    |           ITEM            |   AMOUNT   |       CATEGORY       |     PAYMENT     |     NOTES    ".title())
-                print("="*120)
-                for exp in filtered:
-                    print(exp.display_row())
-                print("="*120)
-
-        elif choice == "v":
-            manager.display_all()
-
-        elif choice == "s":
-            manager.display_stats()
 
         elif choice == "i":
             filename = input("Enter CSV filename to import (default: expense_export.csv): ").strip()
@@ -116,11 +78,54 @@ def main():
                 
             manager.export_to_csv(user_name)
 
+        elif choice == "v":
+            manager.display_all()
+
+        elif choice == "s":
+            manager.display_stats()
+
+        elif choice == "f":
+            cat_name = input("- Enter the category name: \n").strip()
+            if not cat_name:
+                print("-- No category entered --")
+                continue
+            filtered = manager.filter_by_category(cat_name)
+            print(f"\nExpenses in {cat_name.title()}:")
+            if not filtered:
+                print(" -- None Found --")
+            else:
+                print("\n" + "=" * 120)
+                print("ID  |    DATE    |           ITEM            |   AMOUNT   |       CATEGORY       |     PAYMENT     |     NOTES    ")
+                print("="*120)
+                for exp in filtered:
+                    print(exp.display_row())
+                print("="*120 + "\n")
+        
+        elif choice  == "d":
+            try:
+                id_str = input("Enter the Expense-ID to delete: \n").strip()
+                id_to_delete = int(id_str)
+                if manager.delete_expenses(id_to_delete):
+                    print(f"-- Deleted expense ID {id_to_delete} successfully --")
+                else:
+                    print(f"-- No expense with ID {id_to_delete}")
+            except ValueError:
+                print("-- Enter a valid number --")
+        
+        elif choice == "m":
+            manager.display_monthly_summary()
+
         elif choice == "e":
-            print("-- Goodbye --")
+            print("-- GOODBYE --")
             break
+
         else:
-            print("-- Invalid Input. Enter a valid choice --")
+            print("\n-- Invalid Choice | Try Again -- \n")
+            
 
 if __name__ == "__main__":
     main()
+    #test_exp = Expense(1, "2026-03-18", "Test Coffee", 45.5, "Food", "UPI", "Morning break")
+    #print(test_exp)
+    #print(test_exp.to_dict())
+    #print(test_exp.get_month_year())

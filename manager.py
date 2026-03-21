@@ -3,14 +3,14 @@ import json
 from expense import Expense
 import csv
 
-class FinanceManager:  
+class FinanceManager:
 
     def __init__(self):
         self._expenses = []
         self._budget = None
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         self.file_name = os.path.join(BASE_DIR, "expenses.json")
-    
+        
     def get_budget(self):
         return self._budget
     
@@ -31,7 +31,7 @@ class FinanceManager:
             print(f"-- File {full_path} not found --")
             return 0
         imported_count = 0
-        self.expenses = []
+        self._expenses = []
 
         try:
             with open(full_path, 'r', newline='', encoding='utf-8') as csvfile:
@@ -56,22 +56,22 @@ class FinanceManager:
                             payment_method= row["payment_method"],
                             notes= row.get("notes", "")
                         )
-                        self.expenses.append(new_exp)
+                        self._expenses.append(new_exp)
                         imported_count += 1
                     except (ValueError, KeyError)as e:
                         print(f"- Skiping invalid row: {row}")
                         continue
 
             self.save_to_file()
-            print(f"\n Imported {len(self.expenses)} expenses from {full_path}")
+            print(f"\n Imported {len(self._expenses)} expenses from {full_path}")
             return imported_count
         
         except Exception as e:
             print(f"- Error importing CSV: {e}")
             return 0
-
+        
     def export_to_csv(self, file_name):
-        if not self.expenses:
+        if not self._expenses:
             print("- No expenses to export --")
             return 0
         
@@ -86,45 +86,20 @@ class FinanceManager:
 
                 writer.writeheader()
 
-                for exp in self.expenses:
-                   # to_dictionary = exp.to_dict
+                for exp in self._expenses:
                     writer.writerow(exp.to_dict())
                     
-            print(f"- Exported {len(self.expenses)} expenses in {full_path}")
+            print(f"- Exported {len(self._expenses)} expenses in {full_path}")
 
         except Exception as e:
             print(f"- Error exporting CSV: {e}")
-
     
-    def add_expense(self, expense_object):
-        self.expenses.append(expense_object)
-        self.save_to_file()
-
-    def delete_by_id(self, expense_id):
-        for exp in self.expenses:
-            if exp.id == expense_id:
-                self.expenses.remove(exp)
-                self.save_to_file()
-                return True
-        return False
-    
-    def filter_by_category(self, category_name):
-        return[
-            exp for exp in self.expenses
-            if exp.category.lower() == category_name.lower()
-            ]
-    
-    def get_total(self):
-        return sum(exp.amount for exp in self.expenses)
-    
-    def get_next_id(self):
-        if not self.expenses:
-            return 1
-        return max(exp.id for exp in self.expenses) + 1
+    def get_expense_count(self):
+        return (len(self._expenses))
     
     def get_category_breakdown(self):
         breakdown = {}
-        for exp in self.expenses:
+        for exp in self._expenses:
             cat = exp.category
             if cat in breakdown:
                 breakdown[cat] += exp.amount
@@ -134,82 +109,137 @@ class FinanceManager:
 
     def get_payment_breakdown(self):
         breakdown = {}
-        for exp in self.expenses:
+        for exp in self._expenses:
             method = exp.payment_method
             if method in breakdown:
                 breakdown[method] += exp.amount
             else:
                 breakdown[method] = exp.amount
         return breakdown
+
+    def get_total(self):
+        total = sum(exp.amount for exp in self._expenses)
+        return total
     
     def display_stats(self):
-        if not self.expenses:
-            print("-- No expenses to show stats --")
-            return
-        
-        total = self.get_total()
-        remaining = self._budget - total
-        print(f"\n- Total Spent: ₹{total:.2f}")
-        print(f"- Remaining Budget: ₹{remaining:.2f}")
-        if total > self._budget:
-            print("⚠️  WARNING: OVER BUDGET!!  ⚠️")
-        
-        print("\nCategory Breakdown: ")
-        cat_break = self.get_category_breakdown()
-        for cat, amount in sorted(cat_break.items()):
-            print(f"\n- {cat:<20} - {amount:>8.2f}")
-        
-        print(f"\nPayment Breakdown: ")
-        method_break = self.get_payment_breakdown()
-        for method, amount in sorted(method_break.items()):
-            print(f"\n- {method:<15} - {amount:>8.2f}")
+        if not self._expenses:
+            print("-- No expenses found --")
 
-    def display_all(self):
-        if  not self.expenses:
-            print("-- No expense recorded yet. --")
-            return
+        total_spent = self.get_total()
+        remaining = self._budget - total_spent
+
+        print("=" * 120)
+        print(f"\nTotal Spent: ₹{total_spent:>8.2f}")
+        print(f"Remaining Budget: ₹{remaining:>8.2f}\n")
+        print("=" * 120)
+
+        if total_spent > self._budget:
+            print("-- WARNING !! | ⚠️ OVER BUDGET ⚠️")
+
+        print(" Category Breakdown: \n")
+        cat_break = self.get_category_breakdown()
+        for cat, amt in sorted(cat_break.items()):
+            print(f"{cat:<20} | ₹ {amt:>.2f}")
+        print("-" * 120)
+        print(" Payment Breakdown: \n")
+        pay_break = self.get_payment_breakdown()
+        for method, amount in sorted(pay_break.items()):
+            print(f"{method:<20} | ₹ {amount:>.2f}")
+        print("\n"+"=" * 120)
         
-        print("\n" + "="*120)
-        print("ID  |    DATE    |           ITEM            |   AMOUNT   |       CATEGORY       |     PAYMENT     |     NOTES    ")
-        print("="*120)
-        for exp in self.expenses:
-            print(exp.display_row())
-        print("="*120 + "\n")
+
+    def get_monthly_summary(self):
+        monthly = {}
+        for exp in self._expenses:
+            month  = exp.get_month_year()
+            monthly[month] = monthly.get(month, 0) + exp.amount
+        return monthly
+
+    def display_monthly_summary(self):
+        summary = self.get_monthly_summary()
+        if not summary:
+            print("-- No monthly data --\n")
+            return
+        print("\nMonthly Summary: ")
+        for month in sorted(summary.keys()):
+            print(f" {month}: | ₹ {summary[month]:>.2f}")
+
+    def save_to_file(self):
+        data = {
+            "budget": self._budget,
+            "expenses": [exp.to_dict() for exp in self._expenses]
+        }
+        with open(self.file_name, 'w') as file:
+            json.dump(data, file, indent=4)
+
+    def filter_by_category(self, cat_name):
+        return [exp for exp in self._expenses if exp.category.lower() == cat_name.lower()]
     
+    def delete_expenses(self, id_to_delete):
+        for exp in self._expenses:
+            if exp.id == id_to_delete:
+                self._expenses.remove(exp)
+                self.save_to_file()
+                return True
+        return False
+
+    
+    def get_next_id(self):
+        if not self._expenses:
+            return 1
+        else:
+            return max(exp.id for exp in self._expenses) +1
+    
+    def add_expense(self, exp_obj):
+        self._expenses.append(exp_obj)
+        self.save_to_file()
+        print("\n-- Expense Added --")
+
     def load_from_file(self):
         if not os.path.exists(self.file_name):
-            print("-- No file found. Starting fresh. --")
+            print("-- File not found --\n")
             return
         
         try:
-            with open(self.file_name, "r") as f:
-                raw_data = json.load(f)
+            with open(self.file_name, "r") as file:
+                raw_data = json.load(file)
+                if isinstance(raw_data, list):
+                    expenses_data = raw_data
 
-                self._budget = raw_data.get("budget", 5000)
+                elif isinstance(raw_data, dict):
+                    self._budget = raw_data.get("budget", 5000)
+                    expenses_data = raw_data.get("expenses", [])
+
+                else:
+                    raise ValueError("-- Invalid JSON Format --")
                 
-                expenses_data = raw_data.get("expenses", [])
-                self.expenses = []
-                
+                self._expenses = []
+
                 for d in expenses_data:
-                    new_obj = Expense(
-                        id=d["id"], 
-                        date=d["date"], 
-                        item=d["item"], 
+                    new_obj=Expense(
+                        id=d["id"],
+                        date=d["date"],
+                        item=d["item"],
                         amount=float(d["amount"]),
                         category=d["category"],
                         payment_method=d["payment_method"],
                         notes=d["notes"]
                     )
-                    self.expenses.append(new_obj)
-                print(f"Loaded: {len(self.expenses)} expenses | Budget: ₹{self._budget}")
-
+                    self._expenses.append(new_obj)
+                
+                print(f"\n- Expenses loaded: {self.get_expense_count()}")
         except Exception as e:
-            print(f"Error loading data: {e}")
+            print(f"Error Loading: {e}")
 
-    def save_to_file(self):
-        data_to_save = {
-            "budget": self._budget,
-            "expenses": [exp.to_dict() for exp in self.expenses]
-        }
-        with open(self.file_name, "w") as f:
-            json.dump(data_to_save, f, indent=4)
+    def display_all(self):
+        if not self._expenses:
+            print("-- No exepenses found --")
+            return
+        
+        print("\n" + "=" * 120)
+        print("ID  |    DATE    |           ITEM            |   AMOUNT   |       CATEGORY       |     PAYMENT     |     NOTES    ")
+        print("="*120)
+        for exp in self._expenses:
+            print(exp.display_row())
+        print("="*120 + "\n")
+        

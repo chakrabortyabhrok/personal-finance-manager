@@ -9,16 +9,22 @@ class Expense:
         self.payment_method = payment_method
         self.notes = notes
 
-    def display_row(self):
-        return (f"{self.id:<3} | {self.date:<10} | {self.item:<25} | ₹{self.amount:>10.2f} | {self.category:<20} | {self.payment_method:<15} | {self.notes}")
-    
     def to_dict(self):
         return {
             "id": self.id,
-            "date": self.date,
+            "date" : self.date,
             "item": self.item,
             "amount": self.amount,
             "category": self.category,
             "payment_method": self.payment_method,
             "notes": self.notes
         }
+    
+    def display_row(self):
+        return (f"{self.id:<3} | {self.date: <10} | {self.item: <25} | {self.amount:>10.2f} | {self.category:<20} | {self.payment_method: <15} | {self.notes}")
+    
+    #def __str__(self):
+    #    return self.display_row()
+    
+    def get_month_year(self):
+        return self.date[:7]
