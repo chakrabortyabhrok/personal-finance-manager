@@ -65,7 +65,7 @@ class FinanceManager:
         for method, amount in sorted(pay_break.items()):
             print(f"{method:<20} | ₹ {amount:>.2f}")
         print("\n"+"=" * 120)
-        #print("-" * 120)
+        
 
     def get_monthly_summary(self):
         monthly = {}
@@ -90,6 +90,18 @@ class FinanceManager:
         }
         with open(self.file_name, 'w') as file:
             json.dump(data, file, indent=4)
+
+    def filter_by_category(self, cat_name):
+        return [exp for exp in self._expenses if exp.category.lower() == cat_name.lower()]
+    
+    def delete_expenses(self, id_to_delete):
+        for exp in self._expenses:
+            if exp.id == id_to_delete:
+                self._expenses.remove(exp)
+                self.save_to_file()
+                return True
+        return False
+
     
     def get_next_id(self):
         if not self._expenses:
@@ -100,6 +112,7 @@ class FinanceManager:
     def add_expense(self, exp_obj):
         self._expenses.append(exp_obj)
         self.save_to_file()
+        print("\n-- Expense Added --")
 
     def load_from_file(self):
         if not os.path.exists(self.file_name):

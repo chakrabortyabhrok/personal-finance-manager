@@ -44,17 +44,41 @@ def main():
 
             new_exp = Expense(new_id, today, item, amount, category, payment_method, notes)
             manager.add_expense(new_exp)
-            print("\n-- Expense Added --")
+            
 
         elif choice == "v":
             manager.display_all()
 
         elif choice == "s":
             manager.display_stats()
+
+        elif choice == "f":
+            cat_name = input("- Enter the category name: \n").strip()
+            if not cat_name:
+                print("-- No category entered --")
+                continue
+            filtered = manager.filter_by_category(cat_name)
+            print(f"\nExpenses in {cat_name.title()}:")
+            if not filtered:
+                print(" -- None Found --")
+            else:
+                print("\n" + "=" * 120)
+                print("ID  |    DATE    |           ITEM            |   AMOUNT   |       CATEGORY       |     PAYMENT     |     NOTES    ")
+                print("="*120)
+                for exp in filtered:
+                    print(exp.display_row())
+                print("="*120 + "\n")
         
-        elif choice  == "f":
-            print("")
-            manager.display_stats()
+        elif choice  == "d":
+            try:
+                id_str = input("Enter the Expense-ID to delete: \n").strip()
+                id_to_delete = int(id_str)
+                if manager.delete_expenses(id_to_delete):
+                    print(f"-- Deleted expense ID {id_to_delete} successfully --")
+                else:
+                    print(f"-- No expense with ID {id_to_delete}")
+            except ValueError:
+                print("-- Enter a valid number --")
         
         elif choice == "m":
             manager.display_monthly_summary()
