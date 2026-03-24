@@ -5,10 +5,21 @@ from expense import Expense
 def main():
     manager = FinanceManager()
     manager.load_from_file()
+    MENU =  """
+                            --- MENU ---
+                a - Add Expense              v - View All
+                d - Delete Expense           s - Show Stats      
+                b - Show Current Budget      i - Import from CSV
+                u - Update Budget            x - Export to CSV
+                f - Show by Category         e - Exit
+                m - Monthly Summary
+            """
+
     while True:
+        print(MENU)
         choice  = input("Enter your choice: \n").strip().lower()
         if choice == "a":
-            print("-- Add New Expense --\n")
+            print("-- ADD NEW EXPENSE --\n")
 
             today_date = date.today().strftime("%Y/%m/%d")
 
@@ -36,8 +47,13 @@ def main():
         elif choice == "v":
             manager.display_all()
         
-        
-
+        elif choice == "d":
+            print("-- DELETE EXPENSE --\n")
+            id_to_del = int(input("Enter ID to delete: "))
+            if manager.delete_expense(id_to_del):
+                print("-- Expense Deleted --")
+            else:
+                print("-- Couldn't find ID --")
 
 if __name__ == "__main__":
     main()

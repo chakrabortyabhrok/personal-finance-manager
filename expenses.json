@@ -508,11 +508,11 @@
         {
             "id": 57,
             "date": "2026/03/24",
-            "item": "Tff",
+            "item": "Trsf",
             "amount": 2.0,
-            "category": "Test",
-            "payment_method": "Upi",
-            "notes": "Vegetables"
+            "category": "Ff",
+            "payment_method": "Dsf",
+            "notes": "Fsdf"
         }
     ]
 }

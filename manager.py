@@ -66,6 +66,16 @@ class FinanceManager:
             )
         self._expenses.append(new_exp)
         self.save_to_file()
+        print("-- Expense Added --")
+
+    def delete_expense(self, id_to_delete):
+        for exp in self._expenses:
+            if exp.id == id_to_delete:
+                self._expenses.remove(exp)
+                self.save_to_file()
+                return True
+        return  False
+
 
     def display_all(self):
         if not self._expenses:
