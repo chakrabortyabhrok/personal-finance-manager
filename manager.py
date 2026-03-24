@@ -54,6 +54,27 @@ class FinanceManager:
         else:
             return max(exp.id for exp in self._expenses) + 1
         
-    def add_expense(self, new_exp):
+    def add_expense(self, today_date, item, amount, category, payment_method, notes):
+        new_exp = Expense(
+                id=self.get_next_id(),
+                date=today_date,
+                item=item,
+                amount=amount,
+                category=category,
+                payment_method=payment_method,
+                notes=notes
+            )
         self._expenses.append(new_exp)
         self.save_to_file()
+
+    def display_all(self):
+        if not self._expenses:
+            print("-- No exepenses found --")
+            return
+        
+        print("\n" + "=" * 120)
+        print("ID  |    DATE    |           ITEM            |   AMOUNT   |       CATEGORY       |     PAYMENT     |     NOTES    ")
+        print("="*120)
+        for exp in self._expenses:
+            print(exp.display_row())
+        print("="*120 + "\n")

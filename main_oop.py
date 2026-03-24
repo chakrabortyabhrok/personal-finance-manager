@@ -7,6 +7,36 @@ def main():
     manager.load_from_file()
     while True:
         choice  = input("Enter your choice: \n").strip().lower()
+        if choice == "a":
+            print("-- Add New Expense --\n")
+
+            today_date = date.today().strftime("%Y/%m/%d")
+
+            item = input("Enter item name: ").capitalize()
+            while True:
+                
+                try:
+                    amount = int(input("Enter amount: "))
+                    if amount == "":
+                        print("-- No value entered --")
+                    elif amount == 0:
+                        print("-- Enter a positive number --")
+                    else:
+                        break
+                except ValueError:
+                    if ValueError:
+                        print("-- INVALID INPUT --")
+            
+            category = input("Enter category name: ").capitalize()
+            payment_method = input("Enter payment method: ").capitalize()
+            notes = input("Enter notes: ").capitalize()
+            
+            manager.add_expense(today_date, item, amount, category, payment_method, notes)
+
+        elif choice == "v":
+            manager.display_all()
+        
+        
 
 
 if __name__ == "__main__":

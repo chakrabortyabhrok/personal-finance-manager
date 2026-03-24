@@ -504,6 +504,15 @@
             "category": "Test",
             "payment_method": "Upi",
             "notes": "Fdfsd"
+        },
+        {
+            "id": 57,
+            "date": "2026/03/24",
+            "item": "Tff",
+            "amount": 2.0,
+            "category": "Test",
+            "payment_method": "Upi",
+            "notes": "Vegetables"
         }
     ]
 }
