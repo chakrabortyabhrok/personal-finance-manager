@@ -76,6 +76,22 @@ class FinanceManager:
                 return True
         return  False
     
+    def get_monthly_summary(self):
+        monthly = {}
+        for exp in self._expenses:
+            month = exp.get_month_year()
+            monthly[month] = monthly.get(month, 0) + exp.amount
+        return monthly
+    
+    def display_monthly_summary(self):
+        summary = self.get_monthly_summary()
+        if not summary:
+            print("-- No data --")
+            return
+        print("\n- Monthly Summary: \n")
+        for month in sorted(summary.keys()):
+            print(f"{month}: | ₹{summary[month]:>.2f}")
+    
     def get_category_breakdown(self):
         breakdown = {}
         for exp in self._expenses:
@@ -112,8 +128,8 @@ class FinanceManager:
             print("-- WARNING !! | ⚠️ OVER BUDGET ⚠️")
         
         print("="*120)
-        print(f"- Total Spent:      ₹{total_spent:>8.2f}")
-        print(f"- Remaining Spent:  ₹{remaining:>8.2f}")
+        print(f"- Total Spent:       | ₹{total_spent:>8.2f}")
+        print(f"- Remaining Spent:   | ₹{remaining:>8.2f}")
         print("="*120)
         print("\n- Category Breakdown: \n")
         
@@ -126,7 +142,7 @@ class FinanceManager:
 
         pay_break = self.get_payment_breakdown()
         for method, amount in sorted(pay_break.items()):
-            print(f"{method:<15} | ₹{amount:>8}")
+            print(f"{method:<15}      | ₹{amount:>8}")
         print()
         print("="*120)
 

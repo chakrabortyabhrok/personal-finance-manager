@@ -21,7 +21,7 @@ def main():
         if choice == "a":
             print("-- ADD NEW EXPENSE --\n")
 
-            today_date = date.today().strftime("%Y/%m/%d")
+            today_date = date.today().strftime("%Y-%m-%d")
 
             item = input("Enter item name: ").capitalize()
             while True:
@@ -50,6 +50,9 @@ def main():
         elif choice == "s":
             manager.display_stats()
 
+        elif choice == "m":
+            manager.display_monthly_summary()
+
         elif choice == "d":
             print("-- DELETE EXPENSE --\n")
             id_to_del = int(input("Enter ID to delete: "))
@@ -61,6 +64,9 @@ def main():
         elif choice == "e":
             print('-- GOODBYE --')
             break
+
+        else:
+            print("-- Invalid Choice --")
 
 if __name__ == "__main__":
     main()
