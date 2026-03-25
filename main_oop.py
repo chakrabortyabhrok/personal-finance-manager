@@ -46,7 +46,10 @@ def main():
 
         elif choice == "v":
             manager.display_all()
-        
+
+        elif choice == "s":
+            manager.display_stats()
+
         elif choice == "d":
             print("-- DELETE EXPENSE --\n")
             id_to_del = int(input("Enter ID to delete: "))
@@ -54,6 +57,10 @@ def main():
                 print("-- Expense Deleted --")
             else:
                 print("-- Couldn't find ID --")
+        
+        elif choice == "e":
+            print('-- GOODBYE --')
+            break
 
 if __name__ == "__main__":
     main()

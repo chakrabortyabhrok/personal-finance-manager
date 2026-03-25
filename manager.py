@@ -75,7 +75,60 @@ class FinanceManager:
                 self.save_to_file()
                 return True
         return  False
+    
+    def get_category_breakdown(self):
+        breakdown = {}
+        for exp in self._expenses:
+            cat = exp.category
+            amt = exp.amount
+            if cat in breakdown.items():
+                breakdown[cat] += amt
+            else:
+                breakdown[cat] = amt
+        return breakdown
+    
+    def get_payment_breakdown(self):
+        breakdown = {}
+        for exp in self._expenses:
+            method = exp.payment_method
+            amt = exp.amount
+            if method in breakdown.items():
+                breakdown[method] += amt
+            else:
+                breakdown[method] = amt
+        return breakdown
 
+    def get_total(self):
+        return sum(exp.amount for exp in self._expenses)
+    
+    def display_stats(self):
+        if not self._expenses:
+            print("-- No expenses to display --\n")
+            return
+        total_spent = self.get_total()
+        remaining = self.get_budget() - total_spent
+        
+        if total_spent > self._budget:
+            print("-- WARNING !! | ⚠️ OVER BUDGET ⚠️")
+        
+        print("="*120)
+        print(f"- Total Spent:      ₹{total_spent:>8.2f}")
+        print(f"- Remaining Spent:  ₹{remaining:>8.2f}")
+        print("="*120)
+        print("\n- Category Breakdown: \n")
+        
+        cat_break = self.get_category_breakdown()
+        for cat, amt in sorted(cat_break.items()):
+            print(f"{cat:<20} | ₹{amt:>8}")
+        print()
+        print("-"*120)
+        print("\n- Payment Method: \n")
+
+        pay_break = self.get_payment_breakdown()
+        for method, amount in sorted(pay_break.items()):
+            print(f"{method:<15} | ₹{amount:>8}")
+        print()
+        print("="*120)
 
     def display_all(self):
         if not self._expenses:
