@@ -29,10 +29,3 @@ class Expense:
     def get_month_year(self):
         return self.date[:7]
     
-if __name__ == "__main__":
-    test = Expense(1, "2026-03-24", "Test Lunch", 250.0, "Food", "UPI", "With friends")
-    print(test)
-    print()
-    print(test.to_dict())
-    print()
-    print(test.get_month_year())
